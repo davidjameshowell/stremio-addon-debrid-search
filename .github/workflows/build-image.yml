@@ -32,4 +32,4 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GH_PAT_TOKEN }}
           multiPlatform: true
-          platforms: linux/amd64,linux/arm64
+          platform: linux/amd64,linux/arm64
