@@ -1,0 +1,33 @@
+name: "Build debrid-search-stremio Image"
+
+on:
+  workflow_dispatch:
+    inputs:
+      debug_enabled:
+        type: boolean
+        description: 'Run the build with tmate debugging enabled (https://github.com/marketplace/actions/debugging-with-tmate)'
+        required: false
+        default: false
+  push:
+    branches:
+      - main
+
+jobs:
+  build-oci-capacity-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        name: Check out code
+
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3.17
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
+
+      - uses: mr-smithers-excellent/docker-build-push@v6.2
+        with:
+          image: stremio-debrid-search
+          dockerfile: Dockerfile
+          addLatest: true
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GH_PAT_TOKEN }}
